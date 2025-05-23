@@ -63,6 +63,17 @@ const TaskBoard = () => {
     setTasks([...tasks]);
   };
 
+  // handle favorite change
+  const handleChangeFavorite = (taskId) => {
+    const taskIndex = tasks.findIndex((task) => task.id === taskId);
+
+    const newTasks = [...tasks];
+
+    newTasks[taskIndex].isFavorite = !newTasks[taskIndex].isFavorite;
+
+    setTasks([...newTasks]);
+  };
+
   return (
     <section className="mb-20" id="tasks">
       {showAddTaskModal && (
@@ -88,6 +99,7 @@ const TaskBoard = () => {
             tasks={tasks}
             onEdit={handleEditTask}
             onDelete={handleDeleteTask}
+            onFav={handleChangeFavorite}
           />
         </div>
       </div>
