@@ -1,10 +1,17 @@
 import "./App.css";
+import Footer from "./components/Footer/Footer";
+import Header from "./components/Header/Header";
+import Hero from "./components/Hero/Hero";
+import TaskBoard from "./components/Task/TaskBoard";
 
 function App() {
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </div>
+    <>
+      <Header />
+      <Hero />
+      <TaskBoard />
+      <Footer />
+    </>
   );
 }
 
