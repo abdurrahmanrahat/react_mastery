@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AddTaskModal from "./AddTaskModal";
+import NoTasksFound from "./NoTasksFound";
 import SearchTask from "./SearchTask";
 import TaskActions from "./TaskActions";
 import TaskLists from "./TaskLists";
@@ -65,13 +66,31 @@ const TaskBoard = () => {
 
   // handle favorite change
   const handleChangeFavorite = (taskId) => {
-    const taskIndex = tasks.findIndex((task) => task.id === taskId);
+    // This portion of the commented code is not fully perfect. Here
+    // we are not doing the deep cloning of the tasks array. The tasks array has
+    // objects inside, while using the spread operator, it will only make the shallow copy.
+    // But we need to do the deep copy.
 
-    const newTasks = [...tasks];
+    // We are not removing this commented code as it was part of the recording.
+    // But the same code is now made better and written below.
+    /*
+        const taskIndex = tasks.findIndex((task) => task.id === taskId);
+        const newTasks = [...tasks];
+        newTasks[taskIndex].isFavorite = !newTasks[taskIndex].isFavorite;
+        setTasks(newTasks);
+        */
 
-    newTasks[taskIndex].isFavorite = !newTasks[taskIndex].isFavorite;
-
-    setTasks([...newTasks]);
+    // The better way of managing updates in the object within an array as a
+    // state in react.
+    setTasks(
+      tasks.map((task) => {
+        if (task.id === taskId) {
+          return { ...task, isFavorite: !task.isFavorite };
+        } else {
+          return task;
+        }
+      })
+    );
   };
 
   // handle search task
@@ -104,12 +123,16 @@ const TaskBoard = () => {
             onDeleteAllTaskHandler={handleAllTasksDelete}
           />
 
-          <TaskLists
-            tasks={tasks}
-            onEdit={handleEditTask}
-            onDelete={handleDeleteTask}
-            onFav={handleChangeFavorite}
-          />
+          {tasks.length > 0 ? (
+            <TaskLists
+              tasks={tasks}
+              onEdit={handleEditTask}
+              onDelete={handleDeleteTask}
+              onFav={handleChangeFavorite}
+            />
+          ) : (
+            <NoTasksFound />
+          )}
         </div>
       </div>
     </section>
