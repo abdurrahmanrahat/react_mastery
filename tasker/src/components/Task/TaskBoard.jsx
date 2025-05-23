@@ -20,7 +20,7 @@ const TaskBoard = () => {
   const [taskToUpdate, setTaskToUpdate] = useState(null);
 
   // handle add task
-  const handleAddTask = (newTask, isAdd) => {
+  const handleAddEditTask = (newTask, isAdd) => {
     if (isAdd) {
       setTasks([...tasks, newTask]);
     } else {
@@ -44,10 +44,27 @@ const TaskBoard = () => {
     setShowAddTaskModal(true);
   };
 
+  // handle modal close
+  const handleModalClose = () => {
+    setShowAddTaskModal(false);
+    setTaskToUpdate(null);
+  };
+
+  // handle delete task
+  const handleDeleteTask = (taskId) => {
+    const remainingTasks = tasks.filter((task) => task.id !== taskId);
+
+    setTasks(remainingTasks);
+  };
+
   return (
     <section className="mb-20" id="tasks">
       {showAddTaskModal && (
-        <AddTaskModal onSave={handleAddTask} taskToUpdate={taskToUpdate} />
+        <AddTaskModal
+          onSave={handleAddEditTask}
+          taskToUpdate={taskToUpdate}
+          onCloseClick={handleModalClose}
+        />
       )}
       <div className="container mx-auto">
         {/* <!-- Search Box --> */}
@@ -58,7 +75,11 @@ const TaskBoard = () => {
         <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
           <TaskActions onAddTaskHandler={() => setShowAddTaskModal(true)} />
 
-          <TaskLists tasks={tasks} onEdit={handleEditTask} />
+          <TaskLists
+            tasks={tasks}
+            onEdit={handleEditTask}
+            onDelete={handleDeleteTask}
+          />
         </div>
       </div>
     </section>
