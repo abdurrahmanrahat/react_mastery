@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+
+@theme {
+    --container-center: true;
+    --container-padding: 1rem;
+    --font-inter: "Inter", sans-serif;
+    --color-primary: #00D991;
+
+    --color-deepDark: #17181C;
+    --color-mediumDark: #1E1F24;
+    --color-lighterDark: #27292F;
+}
