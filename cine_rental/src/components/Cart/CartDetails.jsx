@@ -7,12 +7,12 @@ import { getImageURL } from "../../utils/cine-utility";
 const CartDetails = ({ onClose }) => {
   const { state, dispatch } = useContext(MovieContext);
 
-  const handleDeleteCart = (event, movieId) => {
+  const handleDeleteCart = (event, movie) => {
     event.preventDefault();
 
     dispatch({
       type: "REMOVE_FROM_CART",
-      id: movieId,
+      payload: movie,
     });
 
     // const filteredItems = state.cartData.filter((item) => item.id !== movieId);
