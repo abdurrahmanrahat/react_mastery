@@ -5,14 +5,19 @@ import { MovieContext } from "../../contexts";
 import { getImageURL } from "../../utils/cine-utility";
 
 const CartDetails = ({ onClose }) => {
-  const { cartData, setCartData } = useContext(MovieContext);
+  const { state, dispatch } = useContext(MovieContext);
 
   const handleDeleteCart = (event, movieId) => {
     event.preventDefault();
 
-    const filteredItems = cartData.filter((item) => item.id !== movieId);
+    dispatch({
+      type: "REMOVE_FROM_CART",
+      id: movieId,
+    });
 
-    setCartData([...filteredItems]);
+    // const filteredItems = state.cartData.filter((item) => item.id !== movieId);
+
+    // setCartData([...filteredItems]);
   };
 
   return (
@@ -23,18 +28,22 @@ const CartDetails = ({ onClose }) => {
             Your Carts
           </h2>
           <div className="space-y-8 lg:space-y-12 max-h-[450px] overflow-auto mb-10 lg:mb-14">
-            {cartData.length > 0 ? (
+            {state.cartData.length === 0 ? (
+              <p className="text-3xl">The Cart is Empty!!!</p>
+            ) : (
               <>
-                {cartData.map((item) => (
+                {state.cartData.map((item) => (
                   <div
                     key={item.id}
                     className="grid grid-cols-[1fr_auto] gap-4"
                   >
                     <div className="flex items-center gap-4">
                       <img
-                        className="rounded overflow-hidden w-32"
-                        src={getImageURL(item.cover)}
-                        alt=""
+                        className="rounded overflow-hidden"
+                        src={getImageURL(`${item.cover}`)}
+                        alt={item.title}
+                        width={"50px"}
+                        height={"50px"}
                       />
                       <div>
                         <h3 className="text-base md:text-xl font-bold">
@@ -48,20 +57,16 @@ const CartDetails = ({ onClose }) => {
                     </div>
                     <div className="flex justify-between gap-4 items-center">
                       <button
-                        className="bg-[#D42967] rounded-md p-2 md:px-4 inline-flex items-center space-x-2 text-white cursor-pointer"
-                        onClick={(event) => handleDeleteCart(event, item.id)}
+                        className="bg-[#D42967] rounded-md p-2 md:px-4 inline-flex items-center space-x-2 text-white"
+                        onClick={() => handleDeleteCart(event, item)}
                       >
-                        <img className="w-5 h-5" src={DeleteSvg} alt="" />
+                        <img className="w-5 h-5" src={DeleteSvg} alt="delete" />
                         <span className="max-md:hidden">Remove</span>
                       </button>
                     </div>
                   </div>
                 ))}
               </>
-            ) : (
-              <div className="w-full text-center font-medium text-xl">
-                No movie added in the cart.
-              </div>
             )}
           </div>
           <div className="flex items-center justify-end gap-2">
@@ -69,7 +74,7 @@ const CartDetails = ({ onClose }) => {
               className="rounded-md p-2 md:px-4 inline-flex items-center space-x-2 bg-primary text-[#171923] text-sm"
               href="#"
             >
-              <img src={CheckoutIcon} width="24" height="24" alt="" />
+              <img src={CheckoutIcon} width="24" height="24" alt="Checkout" />
               <span>Checkout</span>
             </a>
             <a
