@@ -13,3 +13,7 @@
     --color-mediumDark: #1E1F24;
     --color-lighterDark: #27292F;
 }
+
+.dark {
+    @apply bg-[#171923] text-white
+}
