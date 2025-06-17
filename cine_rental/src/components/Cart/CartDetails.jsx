@@ -7,6 +7,14 @@ import { getImageURL } from "../../utils/cine-utility";
 const CartDetails = ({ onClose }) => {
   const { cartData, setCartData } = useContext(MovieContext);
 
+  const handleDeleteCart = (event, movieId) => {
+    event.preventDefault();
+
+    const filteredItems = cartData.filter((item) => item.id !== movieId);
+
+    setCartData([...filteredItems]);
+  };
+
   return (
     <div className="fixed top-0 left-0 w-screen h-screen z-50 bg-black/60 backdrop-blur-sm">
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[420px] sm:max-w-[600px] lg:max-w-[790px] p-4 max-h-[90vh] overflow-auto">
@@ -18,7 +26,10 @@ const CartDetails = ({ onClose }) => {
             {cartData.length > 0 ? (
               <>
                 {cartData.map((item) => (
-                  <div className="grid grid-cols-[1fr_auto] gap-4">
+                  <div
+                    key={item.id}
+                    className="grid grid-cols-[1fr_auto] gap-4"
+                  >
                     <div className="flex items-center gap-4">
                       <img
                         className="rounded overflow-hidden w-32"
@@ -36,7 +47,10 @@ const CartDetails = ({ onClose }) => {
                       </div>
                     </div>
                     <div className="flex justify-between gap-4 items-center">
-                      <button className="bg-[#D42967] rounded-md p-2 md:px-4 inline-flex items-center space-x-2 text-white">
+                      <button
+                        className="bg-[#D42967] rounded-md p-2 md:px-4 inline-flex items-center space-x-2 text-white cursor-pointer"
+                        onClick={(event) => handleDeleteCart(event, item.id)}
+                      >
                         <img className="w-5 h-5" src={DeleteSvg} alt="" />
                         <span className="max-md:hidden">Remove</span>
                       </button>
@@ -45,7 +59,9 @@ const CartDetails = ({ onClose }) => {
                 ))}
               </>
             ) : (
-              <div>No movie added in the cart.</div>
+              <div className="w-full text-center font-medium text-xl">
+                No movie added in the cart.
+              </div>
             )}
           </div>
           <div className="flex items-center justify-end gap-2">
